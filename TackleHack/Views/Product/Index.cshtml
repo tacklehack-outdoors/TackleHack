@@ -1,0 +1,88 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@model IEnumerable<TackleHack.Models.Product>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Products</h1>
+
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <p>
+        <a class="btn btn-primary" asp-action="Create">New</a>
+    </p>
+}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                Item Number
+            </th>
+            <th>
+                Brand
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                SKU
+            </th>
+            <th>
+                MSRP
+            </th>
+            <th>
+                Vendor
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BrandName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sku)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Msrp)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Vendor.Name)
+                </td>
+
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <td>
+                        <a style="text-decoration: none !important" asp-action="Edit" asp-route-id="@item.Id">
+                            <i class="fas fa-edit"></i>
+                        </a> |
+                        <a style="text-decoration: none !important" asp-action="Details" asp-route-id="@item.Id">
+                            <i class="fas fa-file"></i>
+                        </a> |
+                        <a style="text-decoration: none !important" asp-action="Delete" asp-route-id="@item.Id">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <a style="text-decoration: none !important" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

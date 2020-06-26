@@ -1,0 +1,87 @@
+﻿@model TackleHack.ViewModels.ShopItem
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="row">
+    <div class="col-lg-3">
+        <h1 class="my-4">@Html.DisplayFor(model => model.Product.BrandName)</h1>
+        <h4>@Html.DisplayFor(model => model.Product.Sku)</h4>
+        <div class="card card-outline-secondary my-4">
+            <div class="card-header">
+                Features
+            </div>
+            <div class="card-body">
+                @foreach (var item in Model.Product.ProductFeature)
+                {
+                    <p>@Html.DisplayFor(modelItem => item.Feature.Description)</p>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-9">
+        <div class="card mt-4">
+            <div class="iframe-wrapper">
+                <iframe class="card-iframe" width="560" height="315" src="@(Model.YouTubeEmbeddedLink)" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="card-body">
+                <h3 class="card-title">@Html.DisplayFor(model => model.Product.ProductName)</h3>
+                <h4>$@Html.DisplayFor(model => model.Product.Msrp)</h4>
+                <p class="card-text">@Html.DisplayFor(model => model.Product.Description)</p>
+                <span class="text-warning">&#9734; &#9734; &#9734; &#9734; &#9734;</span>
+                No Reviews
+            </div>
+        </div>
+        <div class="card card-outline-secondary my-4">
+            <div class="card-header">
+                Product Reviews
+            </div>
+            <div class="card-body">
+                @foreach (var item in Model.Product.ProductReview)
+                {
+                    <p>@Html.DisplayFor(modelItem => item.Review.Text)</p>
+                    var dateString = item.Review.DateTime.Date.ToString("MM-dd-yyyy");
+                    <small class="text-muted">Posted by @Html.DisplayFor(modelItem => item.Review.UserName) on @dateString</small>
+                    <hr>
+                }
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <div style="display: none;" id="reviewUserName">@User.Identity.Name</div>
+                    <div style="display: none;" id="reviewProductId">@Model.Product.Id</div>
+                    <textarea class="form-control mb-3" id="reviewTextArea" rows="3"></textarea>
+                    <div class="form-group">
+                        <input type="submit" value="Leave a Review" class="btn btn-primary" id="reviewSubmit" />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#reviewSubmit").click(function () {
+            var userName = $("#reviewUserName").text();
+            var productId = $("#reviewProductId").text();
+            var reviewText = $("#reviewTextArea").val();
+
+            if (reviewText.trim() != "") {
+                $.ajax({
+                    url: "/Shop/Review",
+                    type: "POST",
+                    data: {
+                        reviewText: reviewText,
+                        userName: userName,
+                        productId: productId
+                    }
+                }).done(function (result) {
+                    $("#reviewTextArea").val("");
+                });
+            }
+        });
+    });
+</script>

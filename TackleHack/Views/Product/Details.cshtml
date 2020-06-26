@@ -1,0 +1,78 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@model TackleHack.Models.Product
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Product</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Item Number
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ItemNumber)
+        </dd>
+        <dt class="col-sm-2">
+            Brand
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.BrandName)
+        </dd>
+        <dt class="col-sm-2">
+            Name
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProductName)
+        </dd>
+        <dt class="col-sm-2">
+            Description
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-2">
+            SKU
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Sku)
+        </dd>
+        <dt class="col-sm-2">
+            MSRP
+        </dt>
+        <dd class="col-sm-10">
+            $@Html.DisplayFor(model => model.Msrp)
+        </dd>
+        <dt class="col-sm-2">
+            Vendor
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Vendor.Name)
+        </dd>
+    </dl>
+</div>
+@if (SignInManager.IsSignedIn(User))
+{
+    <div>
+        <a style="text-decoration: none !important" asp-action="Edit" asp-route-id="@Model.Id">
+            <i class="fas fa-edit"></i>
+        </a> |
+        <a style="text-decoration: none !important" asp-action="Index">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+    </div>
+}
+else
+{
+    <div>
+        <a style="text-decoration: none !important" asp-action="Index">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+    </div>
+}

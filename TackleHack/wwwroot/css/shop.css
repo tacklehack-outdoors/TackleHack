@@ -1,0 +1,19 @@
+﻿
+.card-title .overflow-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.overflow-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden
+}
+
+.iframe-wrapper {
+    text-align: center;
+    width: 100%
+}
