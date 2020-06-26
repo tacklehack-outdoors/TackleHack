@@ -276,7 +276,7 @@ namespace TackleHack.Models
                     .WithMany(p => p.VendorAddress)
                     .HasForeignKey(d => d.VendorId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_VendorAddress_User");
+                    .HasConstraintName("FK_VendorAddress_Vendor");
             });
 
             modelBuilder.Entity<VendorReview>(entity =>
