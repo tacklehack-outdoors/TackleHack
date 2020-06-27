@@ -15,6 +15,7 @@ namespace TackleHack.Models
         public string Text { get; set; }
         public DateTime DateTime { get; set; }
         public string UserName { get; set; }
+        public int Rating { get; set; }
 
         public virtual ICollection<ProductReview> ProductReview { get; set; }
         public virtual ICollection<VendorReview> VendorReview { get; set; }

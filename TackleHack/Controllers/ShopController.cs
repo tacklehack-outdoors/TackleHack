@@ -26,8 +26,17 @@ namespace TackleHack.Controllers
         // GET: Shop/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            var shopItem = await GetShopItem(id);
+            if (shopItem == null)
                 return NotFound();
+
+            return View(shopItem);
+        }
+
+        public async Task<ShopItem> GetShopItem(int? id)
+        {
+            if (id == null)
+                return null;
 
             var shopItem = new ShopItem();
             using (var context = new TackleHackSQLContext())
@@ -42,29 +51,51 @@ namespace TackleHack.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
 
                 if (shopItem.Product == null)
-                    return NotFound();
+                    return null;
 
                 if (shopItem.Product.Media.Count() > 0)
                 {
                     shopItem.YouTubeLink = shopItem.Product.Media.First().Link;
-                    shopItem.YouTubeEmbeddedLink = "https://www.youtube.com/embed/" 
+                    shopItem.YouTubeEmbeddedLink = "https://www.youtube.com/embed/"
                         + shopItem.YouTubeLink.Substring(shopItem.YouTubeLink.LastIndexOf('/') + 1);
                 }
 
-                shopItem.Reviews = new List<ReviewWithUser>();
-                foreach (var review in shopItem.Product.ProductReview)
+                if (shopItem.Product.ProductReview.Count() > 0)
                 {
-                    var tempReview = new ReviewWithUser();
-                    tempReview.Review = review.Review;
-
+                    shopItem.PercentReview = Convert.ToInt32(GetPercentReview(shopItem.Product.ProductReview));
+                    shopItem.AverageReview = Convert.ToInt32(GetAverageReview(shopItem.Product.ProductReview));
                 }
 
-                return View(shopItem);
+                return shopItem;
             }
         }
 
+        private double GetPercentReview(ICollection<ProductReview> reviews)
+        {
+            var denominator = reviews.Count() * 5;
+            var totalScore = 0;
+            foreach (var review in reviews)
+            {
+                totalScore += review.Review.Rating;
+            }
+            var percentage = (double)totalScore / (double)denominator;
+            return (percentage * 100);
+        }
+
+        private double GetAverageReview(ICollection<ProductReview> reviews)
+        {
+            var denominator = reviews.Count();
+            var totalScore = 0;
+            foreach (var review in reviews)
+            {
+                totalScore += review.Review.Rating;
+            }
+            var average = (double)totalScore / (double)denominator;
+            return average;
+        }
+
         [HttpPost]
-        public async Task<IActionResult> Review(String reviewText, String userName, int productId)
+        public async Task<IActionResult> Review(String reviewText, String userName, int productId, int productRating)
         {
             using (var context = new TackleHackSQLContext())
             {
@@ -72,9 +103,10 @@ namespace TackleHack.Controllers
                 {
                     Text = reviewText,
                     UserName = userName,
-                    DateTime = DateTime.Now
+                    DateTime = DateTime.Now,
+                    Rating = productRating
                 };
-                context.Review.Add(review);
+                context.Add(review);
                 await context.SaveChangesAsync();
 
                 var productReview = new ProductReview()
@@ -82,10 +114,10 @@ namespace TackleHack.Controllers
                     ReviewId = review.Id,
                     ProductId = productId
                 };
-                context.ProductReview.Add(productReview);
+                context.Add(productReview);
                 await context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Details));
+                return RedirectToAction("Details", new { id = productId });
             }
         }
     }

@@ -32,8 +32,16 @@
                 <h3 class="card-title">@Html.DisplayFor(model => model.Product.ProductName)</h3>
                 <h4>$@Html.DisplayFor(model => model.Product.Msrp)</h4>
                 <p class="card-text">@Html.DisplayFor(model => model.Product.Description)</p>
-                <span class="text-warning">&#9734; &#9734; &#9734; &#9734; &#9734;</span>
-                No Reviews
+                <span id="productAvgRating" class="empty-stars-unresponsive"></span>
+                <div style="display: none;" class="unresonsive-rating">@Html.DisplayFor(model => model.AverageReview)</div>
+                @if (Model.Product.ProductReview.Count() > 0)
+                {
+                    <i>@Html.DisplayFor(model => model.PercentReview)%</i>
+                }
+                else
+                {
+                    <i>No Reviews</i>
+                }
             </div>
         </div>
         <div class="card card-outline-secondary my-4">
@@ -44,6 +52,8 @@
                 @foreach (var item in Model.Product.ProductReview)
                 {
                     <p>@Html.DisplayFor(modelItem => item.Review.Text)</p>
+                    <span class="empty-stars-unresponsive"></span>
+                    <div style="display: none;" class="unresonsive-rating">@item.Review.Rating</div>
                     var dateString = item.Review.DateTime.Date.ToString("MM-dd-yyyy");
                     <small class="text-muted">Posted by @Html.DisplayFor(modelItem => item.Review.UserName) on @dateString</small>
                     <hr>
@@ -53,9 +63,11 @@
                     <div style="display: none;" id="reviewUserName">@User.Identity.Name</div>
                     <div style="display: none;" id="reviewProductId">@Model.Product.Id</div>
                     <textarea class="form-control mb-3" id="reviewTextArea" rows="3"></textarea>
+                    <span id="productRating" class="empty-stars"></span>
                     <div class="form-group">
                         <input type="submit" value="Leave a Review" class="btn btn-primary" id="reviewSubmit" />
                     </div>
+                    <i style="display: none;" id="thankYou">Thank you for your feedback!</i>
                 }
             </div>
         </div>
@@ -64,10 +76,18 @@
 
 <script>
     $(document).ready(function () {
+        $("#productRating").responsiveRate();
+
+        $(".empty-stars-unresponsive").each(function () {
+            var rating = $(this).next().text();
+            $(this).unresponsiveRate(rating);
+        });
+
         $("#reviewSubmit").click(function () {
             var userName = $("#reviewUserName").text();
             var productId = $("#reviewProductId").text();
             var reviewText = $("#reviewTextArea").val();
+            var productRating = $("#productRating_rating").text();
 
             if (reviewText.trim() != "") {
                 $.ajax({
@@ -76,10 +96,14 @@
                     data: {
                         reviewText: reviewText,
                         userName: userName,
-                        productId: productId
+                        productId: productId,
+                        productRating: productRating
                     }
                 }).done(function (result) {
                     $("#reviewTextArea").val("");
+                    $("#productRating").empty();
+                    $("#productRating").responsiveRate();
+                    $("#thankYou").css("display", "block");
                 });
             }
         });

@@ -11,8 +11,9 @@ namespace TackleHack.ViewModels
         public Product Product { get; set; }
         public String YouTubeLink { get; set; }
         public String YouTubeEmbeddedLink { get; set; }
-        public List<ReviewWithUser> Reviews { get; set; }
         public String Review { get; set; }
         public String UserName { get; set; }
+        public int AverageReview { get; set; }
+        public int PercentReview { get; set; }
     }
 }

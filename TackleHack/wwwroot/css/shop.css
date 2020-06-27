@@ -17,3 +17,27 @@
     text-align: center;
     width: 100%
 }
+
+i.py-2.px-1.rate-popover.far.fa-star.fas.oneStar {
+    color: #44370f !important;
+}
+
+i.py-2.px-1.rate-popover.far.fa-star.fas.twoStars {
+    color: #96781e !important;
+}
+
+i.py-2.px-1.rate-popover.far.fa-star.fas.threeStars {
+    color: #e2b52e !important;
+}
+
+i.py-2.px-1.rate-popover.far.fa-star.fas.fourStars {
+    color: #f1ba12 !important;
+}
+
+i.py-2.px-1.rate-popover.far.fa-star.fas.fiveStars {
+    color: #f3cb06 !important;
+}
+
+i.py-2.px-1.rate-popover.far.fa-star.fas.amber-text {
+    color: #ffc107 !important;
+}
