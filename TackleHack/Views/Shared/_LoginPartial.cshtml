@@ -6,13 +6,15 @@
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index" title="Cart">
                 <i class="fa fa-shopping-cart"></i>
-                <span class="badge badge-info btn btn-primary">5</span>
+                <span class="badge badge-info btn btn-primary" id="cartBadge"></span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                <i class="fas fa-user-circle"></i>
+            </a>
         </li>
         <li class="nav-item">
             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
@@ -30,3 +32,17 @@
         </li>
     }
 </ul>
+
+<script>
+    $(document).ready(function () {
+        if ($("#cartBadge").length) {
+            $.ajax({
+                url: "/Cart/CartItemBadge",
+                type: "GET"
+            }).done(function (result) {
+                $("#cartBadge").empty();
+                $("#cartBadge").text(result);
+            });
+        }
+    });
+</script>

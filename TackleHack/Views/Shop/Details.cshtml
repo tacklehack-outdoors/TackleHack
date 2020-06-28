@@ -107,6 +107,9 @@
                     productId: productId
                 }
             }).done(function (result) {
+                var numCartItems = parseInt($("#cartBadge").text());
+                $("#cartBadge").empty();
+                $("#cartBadge").text(numCartItems+1);
                 $("#cartThankYou").fadeIn();
             });
         });

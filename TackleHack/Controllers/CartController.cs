@@ -32,5 +32,18 @@ namespace TackleHack.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
+
+        public async Task<IActionResult> CartItemBadge()
+        {
+            var userName = User.Identity.Name;
+            if (userName == null)
+                return NotFound();
+
+            using (var context = new TackleHackSQLContext())
+            {
+                var cartItems = await context.Cart.Where(x => x.UserName == userName).ToListAsync();
+                return Ok(cartItems.Count());
+            }
+        }
     }
 }

@@ -19,16 +19,13 @@
     <thead>
         <tr>
             <th>
-                Item Number
+                SKU
             </th>
             <th>
                 Brand
             </th>
             <th>
                 Name
-            </th>
-            <th>
-                SKU
             </th>
             <th>
                 MSRP
@@ -44,16 +41,13 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ItemNumber)
+                    @Html.DisplayFor(modelItem => item.Sku)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.BrandName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ProductName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Sku)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Msrp)
@@ -68,8 +62,8 @@
                         <a style="text-decoration: none !important" asp-action="Edit" asp-route-id="@item.Id">
                             <i class="fas fa-edit"></i>
                         </a> |
-                        <a style="text-decoration: none !important" asp-action="Details" asp-route-id="@item.Id">
-                            <i class="fas fa-file"></i>
+                        <a style="text-decoration: none !important" asp-action="Details" asp-route-id="@item.Id">                            
+                            <i class="fas fa-info-circle"></i>
                         </a> |
                         <a style="text-decoration: none !important" asp-action="Delete" asp-route-id="@item.Id">
                             <i class="fas fa-trash"></i>

@@ -196,6 +196,18 @@ namespace TackleHack.Controllers
                 context.ProductFeature.RemoveRange(productFeatures);
                 await context.SaveChangesAsync();
 
+                var productReviews = context.ProductReview.Where(x => x.ProductId == id);
+                context.ProductReview.RemoveRange(productReviews);
+                await context.SaveChangesAsync();
+
+                var cartItems = context.Cart.Where(x => x.ProductId == id);
+                context.Cart.RemoveRange(cartItems);
+                await context.SaveChangesAsync();
+
+                var media = context.Media.Where(x => x.ProductId == id);
+                context.Media.RemoveRange(media);
+                await context.SaveChangesAsync();
+
                 var product = await context.Product.FindAsync(id);
                 context.Product.Remove(product);
                 await context.SaveChangesAsync();
