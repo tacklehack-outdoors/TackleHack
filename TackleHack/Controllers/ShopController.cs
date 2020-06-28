@@ -120,5 +120,25 @@ namespace TackleHack.Controllers
                 return RedirectToAction("Details", new { id = productId });
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddToCart(String userName, int productId)
+        {
+            using (var context = new TackleHackSQLContext())
+            {
+                var cart = new Cart()
+                {
+                    UserName = userName,
+                    DateTime = DateTime.Now,
+                    ProductId = productId,
+                    Quantity = 1,
+                    Status = 0
+                };
+                context.Add(cart);
+                await context.SaveChangesAsync();
+
+                return RedirectToAction("Details", new { id = productId });
+            }
+        }
     }
 }

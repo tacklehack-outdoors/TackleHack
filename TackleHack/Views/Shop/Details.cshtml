@@ -7,68 +7,80 @@
     ViewData["Title"] = "Details";
 }
 
-<div class="row">
-    <div class="col-lg-3">
-        <h1 class="my-4">@Html.DisplayFor(model => model.Product.BrandName)</h1>
-        <h4>@Html.DisplayFor(model => model.Product.Sku)</h4>
-        <div class="card card-outline-secondary my-4">
-            <div class="card-header">
-                Features
-            </div>
-            <div class="card-body">
-                @foreach (var item in Model.Product.ProductFeature)
-                {
-                    <p>@Html.DisplayFor(modelItem => item.Feature.Description)</p>
-                }
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-9">
-        <div class="card mt-4">
-            <div class="iframe-wrapper">
-                <iframe class="card-iframe" width="560" height="315" src="@(Model.YouTubeEmbeddedLink)" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-            <div class="card-body">
-                <h3 class="card-title">@Html.DisplayFor(model => model.Product.ProductName)</h3>
-                <h4>$@Html.DisplayFor(model => model.Product.Msrp)</h4>
-                <p class="card-text">@Html.DisplayFor(model => model.Product.Description)</p>
-                <span id="productAvgRating" class="empty-stars-unresponsive"></span>
-                <div style="display: none;" class="unresonsive-rating">@Html.DisplayFor(model => model.AverageReview)</div>
-                @if (Model.Product.ProductReview.Count() > 0)
-                {
-                    <i>@Html.DisplayFor(model => model.PercentReview)%</i>
-                }
-                else
-                {
-                    <i>No Reviews</i>
-                }
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3">
+            <h1 class="my-4">@Html.DisplayFor(model => model.Product.BrandName)</h1>
+            <h4>@Html.DisplayFor(model => model.Product.Sku)</h4>
+            <div class="card card-outline-secondary my-4">
+                <div class="card-header">
+                    Features
+                </div>
+                <div class="card-body">
+                    @foreach (var item in Model.Product.ProductFeature)
+                    {
+                        <p>@Html.DisplayFor(modelItem => item.Feature.Description)</p>
+                    }
+                </div>
             </div>
         </div>
-        <div class="card card-outline-secondary my-4">
-            <div class="card-header">
-                Product Reviews
-            </div>
-            <div class="card-body">
-                @foreach (var item in Model.Product.ProductReview)
-                {
-                    <p>@Html.DisplayFor(modelItem => item.Review.Text)</p>
-                    <span class="empty-stars-unresponsive"></span>
-                    <div style="display: none;" class="unresonsive-rating">@item.Review.Rating</div>
-                    var dateString = item.Review.DateTime.Date.ToString("MM-dd-yyyy");
-                    <small class="text-muted">Posted by @Html.DisplayFor(modelItem => item.Review.UserName) on @dateString</small>
-                    <hr>
-                }
-                @if (SignInManager.IsSignedIn(User))
-                {
-                    <div style="display: none;" id="reviewUserName">@User.Identity.Name</div>
-                    <div style="display: none;" id="reviewProductId">@Model.Product.Id</div>
-                    <textarea class="form-control mb-3" id="reviewTextArea" rows="3"></textarea>
-                    <span id="productRating" class="empty-stars"></span>
+        <div class="col-lg-9">
+            <div class="card mt-4">
+                <div class="iframe-wrapper">
+                    <iframe class="card-iframe" width="560" height="315" src="@(Model.YouTubeEmbeddedLink)" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">@Html.DisplayFor(model => model.Product.ProductName)</h3>
+                    <h4>$@Html.DisplayFor(model => model.Product.Msrp)</h4>
+                    <p class="card-text">@Html.DisplayFor(model => model.Product.Description)</p>
+                    <span id="productAvgRating" class="empty-stars-unresponsive"></span>
+                    <div style="display: none;" class="unresonsive-rating">@Html.DisplayFor(model => model.AverageReview)</div>
+                    @if (Model.Product.ProductReview.Count() > 0)
+                    {
+                        <i>@Html.DisplayFor(model => model.PercentReview)%</i>
+                    }
+                    else
+                    {
+                        <i>No Reviews</i>
+                    }
                     <div class="form-group">
-                        <input type="submit" value="Leave a Review" class="btn btn-primary" id="reviewSubmit" />
+                        <input type="submit" value="Add to Cart" class="btn btn-primary" id="cartSubmit" />
                     </div>
-                    <i style="display: none;" id="thankYou">Thank you for your feedback!</i>
-                }
+                    <div class="alert alert-info" style="display: none;" id="cartThankYou">
+                        <a class="close" style="cursor: pointer;" id="cartThankYouClose">&times;</a>
+                        Thank you!
+                    </div>
+                </div>
+            </div>
+            <div class="card card-outline-secondary my-4">
+                <div class="card-header">
+                    Product Reviews
+                </div>
+                <div class="card-body">
+                    @foreach (var item in Model.Product.ProductReview)
+                    {
+                        <p>@Html.DisplayFor(modelItem => item.Review.Text)</p>
+                        <span class="empty-stars-unresponsive"></span>
+                        <div style="display: none;" class="unresonsive-rating">@item.Review.Rating</div>
+                        var dateString = item.Review.DateTime.Date.ToString("MM-dd-yyyy");
+                        <small class="text-muted">Posted by @Html.DisplayFor(modelItem => item.Review.UserName) on @dateString</small>
+                        <hr>
+                    }
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <div style="display: none;" id="reviewUserName">@User.Identity.Name</div>
+                        <div style="display: none;" id="reviewProductId">@Model.Product.Id</div>
+                        <textarea class="form-control mb-3" id="reviewTextArea" rows="3"></textarea>
+                        <span id="productRating" class="empty-stars"></span>
+                        <div class="form-group">
+                            <input type="submit" value="Leave a Review" class="btn btn-primary" id="reviewSubmit" />
+                        </div>
+                        <div class="alert alert-info" style="display: none;" id="reviewThankYou">
+                            <a class="close" style="cursor: pointer;" id="reviewThankYouClose">&times;</a>
+                            Thank you for your feedback!
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     </div>
@@ -81,6 +93,26 @@
         $(".empty-stars-unresponsive").each(function () {
             var rating = $(this).next().text();
             $(this).unresponsiveRate(rating);
+        });
+
+        $("#cartSubmit").click(function () {
+            var userName = $("#reviewUserName").text();
+            var productId = $("#reviewProductId").text();
+
+            $.ajax({
+                url: "/Shop/AddToCart",
+                type: "POST",
+                data: {
+                    userName: userName,
+                    productId: productId
+                }
+            }).done(function (result) {
+                $("#cartThankYou").fadeIn();
+            });
+        });
+
+        $("#cartThankYouClose").click(function () {
+            $("#cartThankYou").fadeOut();
         });
 
         $("#reviewSubmit").click(function () {
@@ -103,9 +135,13 @@
                     $("#reviewTextArea").val("");
                     $("#productRating").empty();
                     $("#productRating").responsiveRate();
-                    $("#thankYou").css("display", "block");
+                    $("#reviewThankYou").fadeIn();
                 });
             }
+        });
+
+        $("#reviewThankYouClose").click(function () {
+            $("#reviewThankYou").fadeOut();
         });
     });
 </script>

@@ -41,3 +41,8 @@ i.py-2.px-1.rate-popover.far.fa-star.fas.fiveStars {
 i.py-2.px-1.rate-popover.far.fa-star.fas.amber-text {
     color: #ffc107 !important;
 }
+
+.cart-nav-item {
+    font-size:16px; 
+    cursor: pointer;
+}

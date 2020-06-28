@@ -10,6 +10,7 @@ namespace TackleHack.Models
         public int ProductId { get; set; }
         public int Quantity { get; set; }
         public int Status { get; set; }
+        public DateTime DateTime { get; set; }
 
         public virtual Product Product { get; set; }
     }
